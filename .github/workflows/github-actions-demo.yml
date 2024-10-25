@@ -12,7 +12,7 @@ jobs:
       - name: Set up SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Deploy to Server
         run: |
           ssh -T maalsi@34.155.254.188 <<EOF

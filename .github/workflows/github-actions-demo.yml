@@ -15,6 +15,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            chmod 600
             mkdir /srv/DjMarcelCiCd
             cd /srv/DjMarcelCiCd
             git pull origin main

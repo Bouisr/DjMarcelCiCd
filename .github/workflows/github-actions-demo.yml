@@ -13,7 +13,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           ssh: |
-            default=${{ env.SSH_AUTH_SOCK }}
+            default=${{ env.SSH_PRIVATE_KEY }}
       - name: connect with ssh
         run: ssh maalsi@34.155.254.188
 

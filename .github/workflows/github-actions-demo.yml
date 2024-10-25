@@ -15,7 +15,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Deploy to Server
         run: |
-          ssh -T maalsi@34.155.254.188 <<EOF
+          ssh -T ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP_ADDRESS }} <<EOF
             cd /srv/DjMarcelCiCd
             git pull origin main
             docker-compose down --rmi all

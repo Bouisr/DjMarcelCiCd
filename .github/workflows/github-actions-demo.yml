@@ -4,7 +4,7 @@ on:
     branches:
     - main
 jobs:
-  docker:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repo
@@ -15,7 +15,8 @@ jobs:
           host: 34.155.254.188
           username: maalsi
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          run: cd /srv/DjMarcelCiCd
-          run: git pull origin main
-          run: docker compose down
-          run: docker compose up -d --build    
+          run: |
+            cd /srv/DjMarcelCiCd
+            git pull origin main
+            docker compose down
+            docker compose up -d --build

@@ -8,10 +8,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Docker Buildx
+      - uses: actions/checkout@v4  # Update to v4 for node20 compatibility
+      - name: Set up Docker Buildx (using node20)
         uses: docker/setup-buildx-action@v2
+        with:
+          node-version: '20'  # Specify node20 explicitly
       - name: Build and run Docker Compose
-        run: |
-          docker-compose build
-          docker-compose up -d
+        run: docker-compose build
+        # Add additional steps for pushing to registry (if needed)

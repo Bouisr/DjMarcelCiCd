@@ -97,6 +97,7 @@
             // Mise à jour de la liste des réservations locales et affichage
             getBooking()
         });
+        // Recuperer les reservations
         function getBooking(){
             fetchData('http://34.155.254.188:3002/booking')
             .then((res) => {

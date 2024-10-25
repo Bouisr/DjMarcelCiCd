@@ -1,6 +1,6 @@
 name: Deploy containers
 on:
-  pull_request:
+  push:
     branches:
     - main
 jobs:

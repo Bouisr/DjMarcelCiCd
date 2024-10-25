@@ -19,7 +19,3 @@ jobs:
           run: git pull origin main
           run: docker compose down
           run: docker compose up -d --build    
-
-    # cd /srv/DjMarcelCiCd
-    # git pull origin main
-    # docker compose up -d --build

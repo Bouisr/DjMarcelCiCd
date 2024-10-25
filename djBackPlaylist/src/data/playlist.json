@@ -1,0 +1,84 @@
+{
+  "playlists": [
+    {
+      "id": 1,
+      "title": "Évasion Tropicale",
+      "songs": [
+        {
+          "id": 1,
+          "title": "Chanson de Plage",
+          "author": "Les Vagues"
+        },
+        {
+          "id": 2,
+          "title": "Soleil Couchant",
+          "author": "Léo Riviera"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Rétro Hits",
+      "songs": [
+        {
+          "id": 3,
+          "title": "Disco Fever",
+          "author": "La Disco Band"
+        },
+        {
+          "id": 4,
+          "title": "Nuit Étoilée",
+          "author": "Sophie Étoile"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Ambiance Chill",
+      "songs": [
+        {
+          "id": 5,
+          "title": "Brise Douce",
+          "author": "Lumière d'Automne"
+        },
+        {
+          "id": 6,
+          "title": "Mélodie de Minuit",
+          "author": "Sons du Silence"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Énergie Électro",
+      "songs": [
+        {
+          "id": 7,
+          "title": "Rythme de la Nuit",
+          "author": "DJ Lumière"
+        },
+        {
+          "id": 8,
+          "title": "Vibes de la Ville",
+          "author": "Électro Urban"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Classiques Romantiques",
+      "songs": [
+        {
+          "id": 9,
+          "title": "Amour Toujours",
+          "author": "Roméo et Juliette"
+        },
+        {
+          "id": 10,
+          "title": "Danse avec Moi",
+          "author": "Les Amoureux"
+        }
+      ]
+    }
+  ]
+}

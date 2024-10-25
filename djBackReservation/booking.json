@@ -1,0 +1,25 @@
+{
+    "soirees": [
+        {
+            "id": 1,
+            "nom": "Soirée d'enfer 2",
+            "date": "23/10/2024",
+            "playlist": 1,
+            "client": "M. Mescouillesenskis"
+        },
+        {
+            "id": 2,
+            "nom": "Journée infernale",
+            "date": "24/10/2024",
+            "playlist": 5,
+            "client": "Mme Trucmuche"
+        },
+        {
+            "id": 3,
+            "nom": "j'en ai marre",
+            "date": "24/10/2024",
+            "playlist": 2,
+            "client": "M Cassepieds"
+        }
+    ]
+}

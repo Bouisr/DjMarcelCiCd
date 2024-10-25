@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Marcel - Gestion des Soirées</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Gestion des Soirées</h1>
+    </header>
+
+    <main>
+        <section id="soirees">
+            <label for="reservationItemsDJ">Type de soirée:</label>
+            <select id="reservationItemsDJ">
+            </select>
+        </section>
+
+        <section id="playlists">
+            <h2>Modifier la playlist pour la soirée</h2>
+            <form id="playlistForm">
+                <label for="soireePlaylist">Playlist de la soirée : </label>
+                <p id="soireePlaylist"></p>
+                <label for="playlistList">Modifier la playlist de la soirée : </label>
+                <select id="playlistList"></select>
+                <button type="submit">Modifier</button>
+            </form>
+
+            <div id="playlistSongs">
+                <h3>Playlist pour la soirée sélectionnée</h3>
+                <ul id="playlistItems"></ul>
+            </div>
+        </section>
+
+        <a href="index.html">Retour à l'accueil</a>
+    </main>
+    <script>
+        let reservations = []
+        getBooking();
+        fetchData('http://localhost:3001/playlists')
+            .then((res) => {
+                setPlaylists(res.playlist)
+            })
+            .catch(function (error) {
+                console.error("Error processing playlists:", error);
+            });
+        async function fetchData(url) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                // Ouvrir une requête GET vers l'URL de votre API
+                xhr.open('GET', url);
+
+                // Fonction à exécuter lorsque l'état de la requête change
+                xhr.onload = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // La requête a réussi
+                            const data = JSON.parse(xhr.responseText);
+                            resolve(data)
+                            // Utilisez les données ici
+                        } else {
+                            reject("erreur")
+                            // Une erreur s'est produite
+                            console.error('Erreur lors de la requête :', xhr.status);
+                        }
+                    }
+                };
+                xhr.send()
+            });
+        }
+        function setPlaylists(playlists) {
+            const playlistItems = $('#playlistItems');
+            playlistItems.empty(); // Clear existing list items before appending
+
+            // Loop through each property in the "playlist" object
+            for (const playlistName in playlists) {
+                const playlist = playlists[playlistName]; // Access the playlist object
+
+                if (playlist) { // Check if playlist exists
+                    // Create a heading for the current playlist
+                    const playlistHeading = `<h3>${playlistName}</h3>`;
+                    playlistItems.append(playlistHeading); // Add the heading to the list
+
+                    // Use map to create list items from songs and append them
+                    const songItems = playlist.map(song => `<li>${song.title} - ${song.author}</li>`);
+                    playlistItems.append(...songItems); // Spread operator (*) to append all items
+                } else {
+                    console.warn("Playlist", playlistName, "not found.");
+                }
+            }
+        }
+        function getBooking() {
+            fetchData('http://localhost:3002/booking')
+                .then((res) => {
+                    reservations = res.soirees;
+                    setReservations(res.soirees);
+                    // initializeForm(res.soirees);
+                })
+                .catch(function (error) {
+                    console.error("Error processing datas:", error);
+                });
+        }
+
+        function getBookingById(id) {
+            fetchData(`http://localhost:3002/booking/${id}`)
+                .then((res) => {
+                    $('#soireePlaylist').empty().append(id)
+                    $('#playlistList').empty()
+                    let newReservationsList = supprimerObjetParId(reservations, res.playlist.id)
+                    newReservationsList.forEach(reservation => {
+                       let optionReservation = `<option value=${reservation.playlist}>${reservation.playlist}</option>`;
+                       $('#playlistList').append(optionReservation)
+                    })
+                })
+                .catch(function (error) {
+                    console.error("Error processing datas:", error);
+                });
+        }
+function supprimerObjetParId(tableauObjets, idASupprimer) {
+  // Filtrer le tableau pour ne garder que les objets dont l'ID est différent de celui à supprimer
+  const nouveauTableau = tableauObjets.filter(objet => objet.id !== idASupprimer);
+
+  return nouveauTableau;
+}
+
+        function setReservations(reservations) {
+            const reservationItems = $('#reservationItemsDJ');
+            reservationItems.empty(); // Vider la liste avant d'ajouter les nouvelles données
+            supprimerDoublonsEtCreerOptions(reservations, reservationItems);
+        }
+
+        function supprimerDoublonsEtCreerOptions(reservations, reservationItems) {
+            // Grouper les réservations par nom
+            const reservationsParNom = reservations.reduce((acc, reservation) => {
+                acc[reservation.nom] = acc[reservation.nom] || [];
+                acc[reservation.nom].push(reservation);
+                return acc;
+            }, {});
+
+            // Créer les options en prenant la dernière réservation de chaque groupe
+            Object.values(reservationsParNom).forEach(groupe => {
+                const derniereReservation = groupe[groupe.length - 1];
+                const optionReservation = `<option value="${derniereReservation.id}">${derniereReservation.nom} - ${derniereReservation.date}</option>`;
+                reservationItems.append(optionReservation);
+
+                // Afficher le client si présent
+                if (derniereReservation.client) {
+                    reservationItems.append(`<p><strong>Client :</strong></p><ul><li>${derniereReservation.client}</li></ul>`);
+                }
+            });
+        }
+
+        $("#reservationItemsDJ").on("change", function (event) {
+            event.preventDefault();
+            getBookingById(this.value)
+        });
+        $("#playlistForm").on("submit", function (event) {
+            event.preventDefault();
+           const idReservation = $('#reservationItemsDJ').find(":selected").val();
+           const playlistId = $('#playlistList').val();
+           let newPlaylistForReservation = {
+            'id': idReservation,
+            'playlist' : playlistId
+           }
+           sendData(`http://localhost:3002/booking/${id}`,newPlaylistForReservation)
+
+        });
+
+        function sendData(url, data) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        console.log("Réservation envoyée avec succès :", xhr.responseText);
+                    } else {
+                        console.error("Erreur lors de l'envoi de la réservation :", xhr.statusText);
+                    }
+                }
+            };
+
+            xhr.send(JSON.stringify(data));
+        }
+    </script>
+</body>
+
+</html>

@@ -8,26 +8,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          ssh: |
-            default=${{ env.SSH_PRIVATE_KEY }}
-      - name: connect with ssh
-        run: ssh maalsi@34.155.254.188
-
       - name: Clone repo
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
-      - name: cd repo
-        run: cd /srv/DjMarcelCiCd
-
-      - name: pull main
-        run: git pull origin main
-
-      - name: build container
-        run: docker compose up -d --build
+      - name: pull and deploy
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: 34.155.254.188
+          username: maalsi
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /srv/DjMarcelCiCd
+            git pull origin main
+            docker compose down
+            docker compose up -d --build
 
     # cd /srv/DjMarcelCiCd
     # git pull origin main

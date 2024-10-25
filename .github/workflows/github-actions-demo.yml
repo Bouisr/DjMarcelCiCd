@@ -6,11 +6,9 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-
     steps:
       - name: Clone repo
       - uses: actions/checkout@v2
-
       - name: pull and deploy
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -21,7 +19,7 @@ jobs:
           run: git pull origin main
           run: docker compose down
           run: docker compose up -d --build    
-          
+
     # cd /srv/DjMarcelCiCd
     # git pull origin main
     # docker compose up -d --build

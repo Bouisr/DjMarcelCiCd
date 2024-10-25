@@ -15,7 +15,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /srv/DjMarcelCiCd
+            cd /home/runner/work/DjMarcelCiCd/DjMarcelCiCd/
             git pull origin main
             docker-compose down
             docker-compose up -d --build
